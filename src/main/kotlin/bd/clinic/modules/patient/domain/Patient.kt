@@ -1,9 +1,7 @@
 package bd.clinic.modules.patient.domain
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import bd.clinic.modules.examination.Examination
+import javax.persistence.*
 
 @Entity
 class Patient(
@@ -11,5 +9,7 @@ class Patient(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null,
     val firstName: String,
-    val lastName: String
+    val lastName: String,
+    @OneToMany(mappedBy = "patient")
+    val examinations: MutableList<Examination>
 )
