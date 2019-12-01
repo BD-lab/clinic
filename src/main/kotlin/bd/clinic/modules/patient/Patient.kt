@@ -1,7 +1,11 @@
 package bd.clinic.modules.patient
 
-import bd.clinic.modules.examination.Examination
+import bd.clinic.modules.address.Address
+import org.hibernate.validator.constraints.pl.PESEL
+import org.springframework.validation.annotation.Validated
+import java.time.LocalDate
 import javax.persistence.*
+import javax.validation.Valid
 
 @Entity
 class Patient(
@@ -10,6 +14,9 @@ class Patient(
         val id: Int? = null,
         val firstName: String,
         val lastName: String,
-        @OneToMany(mappedBy = "patient")
-        val examinations: MutableList<Examination>
+        @field:PESEL
+        val pesel: String,
+        @Embedded
+        val address: Address,
+        val creationDate: LocalDate = LocalDate.now()
 )
