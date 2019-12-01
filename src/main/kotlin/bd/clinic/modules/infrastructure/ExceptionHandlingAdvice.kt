@@ -13,6 +13,11 @@ class ExceptionHandlingAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
     }
 
+    @ExceptionHandler(EntityIdNullException::class)
+    fun handleNullIdEntity(e: EntityIdNullException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleNotValidArgument(e: MethodArgumentNotValidException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.bindingResult.fieldError?.defaultMessage)

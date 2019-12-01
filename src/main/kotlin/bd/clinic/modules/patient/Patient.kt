@@ -2,10 +2,8 @@ package bd.clinic.modules.patient
 
 import bd.clinic.modules.address.Address
 import org.hibernate.validator.constraints.pl.PESEL
-import org.springframework.validation.annotation.Validated
 import java.time.LocalDate
 import javax.persistence.*
-import javax.validation.Valid
 
 @Entity
 class Patient(

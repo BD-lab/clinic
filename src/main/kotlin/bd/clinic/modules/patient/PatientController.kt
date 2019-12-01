@@ -25,4 +25,7 @@ class PatientController(
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     fun addPatient(@Valid @RequestBody patient: Patient): Patient = patientService.addPatient(patient)
+
+    @PutMapping
+    fun updatePatient(@Valid @RequestBody patient: Patient): Patient = patientService.updatePatient(patient)
 }
