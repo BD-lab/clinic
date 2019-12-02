@@ -12,9 +12,10 @@ class Patient(
         val id: Int? = null,
         val firstName: String,
         val lastName: String,
-        @field:PESEL
+        @field:PESEL(message = "Invalid PESEL number.")
         val pesel: String,
         @Embedded
         val address: Address,
+        @Column(updatable = false)
         val creationDate: LocalDate = LocalDate.now()
 )

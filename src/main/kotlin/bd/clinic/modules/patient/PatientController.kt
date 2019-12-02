@@ -17,15 +17,15 @@ class PatientController(
     }
 
     @GetMapping
-    fun getAllPatients(): List<Patient> = patientService.getAllPatients()
+    fun getAllPatients(): List<PatientDTO> = patientService.getAllPatients()
 
     @GetMapping("/{$PATIENT_ID}")
-    fun getPatient(@PathVariable patientId: Int): Patient = patientService.getPatientOrElseThrow(patientId)
+    fun getPatient(@PathVariable patientId: Int): PatientDTO = patientService.getPatientOrElseThrow(patientId)
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun addPatient(@Valid @RequestBody patient: Patient): Patient = patientService.addPatient(patient)
+    fun addPatient(@Valid @RequestBody patient: PatientDTO): PatientDTO = patientService.addPatient(patient)
 
     @PutMapping
-    fun updatePatient(@Valid @RequestBody patient: Patient): Patient = patientService.updatePatient(patient)
+    fun updatePatient(@Valid @RequestBody patient: PatientDTO): PatientDTO = patientService.updatePatient(patient)
 }

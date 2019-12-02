@@ -9,16 +9,20 @@ import org.springframework.stereotype.Service
 class PatientService(
         private val patientRepository: PatientRepository
 ) {
-    fun getAllPatients(): List<Patient> = patientRepository.findAll()
+    fun getAllPatients(): List<PatientDTO> = patientRepository.findAll().map { PatientDTO(it) }
 
-    fun getPatientOrElseThrow(patientId: Int): Patient = patientRepository.findByIdOrNull(patientId)
-            ?: throw EntityNotFoundException(Patient::class, patientId)
+    fun getPatientOrElseThrow(patientId: Int): PatientDTO = PatientDTO(
+            patientRepository.findByIdOrNull(patientId)
+                    ?: throw EntityNotFoundException(Patient::class, patientId)
+    )
 
-    fun addPatient(patient: Patient): Patient = patientRepository.save(patient)
+    fun addPatient(patient: PatientDTO): PatientDTO = PatientDTO(
+            patientRepository.save(patient.toPatientEntity())
+    )
 
-    fun updatePatient(patient: Patient): Patient {
+    fun updatePatient(patient: PatientDTO): PatientDTO {
         val patientId = patient.id ?: throw EntityIdNullException(Patient::class)
         getPatientOrElseThrow(patientId)
-        return patientRepository.save(patient)
+        return PatientDTO(patientRepository.save(patient.toPatientEntity()))
     }
 }
