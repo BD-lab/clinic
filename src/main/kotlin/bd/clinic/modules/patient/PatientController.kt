@@ -20,7 +20,7 @@ class PatientController(
     fun getAllPatients(): List<PatientDTO> = patientService.getAllPatients()
 
     @GetMapping("/{$PATIENT_ID}")
-    fun getPatient(@PathVariable patientId: Int): PatientDTO = patientService.getPatientOrElseThrow(patientId)
+    fun getPatient(@PathVariable patientId: Int): PatientDTO = patientService.getPatient(patientId)
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)

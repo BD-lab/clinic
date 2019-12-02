@@ -22,4 +22,9 @@ class ExceptionHandlingAdvice {
     fun handleNotValidArgument(e: MethodArgumentNotValidException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.bindingResult.fieldError?.defaultMessage)
     }
+
+    @ExceptionHandler(EntityAlreadyExistsException::class)
+    fun handleAlreadyExistsEntity(e: EntityAlreadyExistsException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
+    }
 }
