@@ -18,8 +18,8 @@ class PatientService(
 
     fun addPatient(patient: PatientDTO): PatientDTO {
         val patientId = patient.id
-        if (patientId != null && patientRepository.findByIdOrNull(patient.id) != null)
-            throw EntityAlreadyExistsException(Patient::class, patient.id)
+        if (patientId != null && patientRepository.findByIdOrNull(patientId) != null)
+            throw EntityAlreadyExistsException(Patient::class, patientId)
         return PatientDTO(patientRepository.save(patient.toPatientEntity()))
     }
 
