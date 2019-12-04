@@ -1,6 +1,8 @@
 package bd.clinic.modules.patient
 
-import bd.clinic.modules.examination.Examination
+import bd.clinic.modules.address.Address
+import org.hibernate.validator.constraints.pl.PESEL
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -10,6 +12,10 @@ class Patient(
         val id: Int? = null,
         val firstName: String,
         val lastName: String,
-        @OneToMany(mappedBy = "patient")
-        val examinations: MutableList<Examination>
+        @field:PESEL(message = "Invalid PESEL number.")
+        val pesel: String,
+        @Embedded
+        val address: Address,
+        @Column(updatable = false)
+        val creationDate: LocalDate = LocalDate.now()
 )
