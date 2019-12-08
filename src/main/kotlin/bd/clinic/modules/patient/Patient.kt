@@ -2,7 +2,7 @@ package bd.clinic.modules.patient
 
 import bd.clinic.modules.address.Address
 import org.hibernate.validator.constraints.pl.PESEL
-import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -17,5 +17,5 @@ class Patient(
         @Embedded
         val address: Address,
         @Column(updatable = false)
-        val creationDate: LocalDate = LocalDate.now()
+        val creationDate: LocalDateTime = LocalDateTime.now()
 )
