@@ -18,6 +18,10 @@ class OrderController(
     @GetMapping("/{$ORDER_ID}")
     fun getOrder(@PathVariable orderId: Int): OrderDTO = orderService.getOrder(orderId)
 
+    @GetMapping(params = ["orderNumber"])
+    fun getOrderByNumber(@RequestParam(name = "orderNumber") orderNumber: String): OrderDTO =
+            orderService.getOrderByNumber(orderNumber)
+
     @GetMapping
     fun getAllOrders(): List<OrderDTO> = orderService.getAllOrders()
 

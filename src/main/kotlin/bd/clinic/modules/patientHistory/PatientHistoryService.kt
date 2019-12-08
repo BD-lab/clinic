@@ -1,6 +1,6 @@
 package bd.clinic.modules.patientHistory
 
-import bd.clinic.modules.infrastructure.EntityNotFoundException
+import bd.clinic.modules.infrastructure.exceptions.EntityNotFoundException
 import bd.clinic.modules.patient.Patient
 import bd.clinic.modules.patient.PatientDTO
 import bd.clinic.modules.patient.PatientRepository

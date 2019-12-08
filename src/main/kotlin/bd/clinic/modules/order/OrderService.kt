@@ -1,7 +1,8 @@
 package bd.clinic.modules.order
 
-import bd.clinic.modules.infrastructure.EntityNotFoundException
-import bd.clinic.modules.infrastructure.OrderAlreadyExistsException
+import bd.clinic.modules.infrastructure.exceptions.EntityNotFoundException
+import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
+import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
 import bd.clinic.modules.patient.PatientService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -13,6 +14,10 @@ class OrderService(
 ) {
     fun getOrder(orderId: Int) = OrderDTO(
             orderRepository.findByIdOrNull(orderId) ?: throw EntityNotFoundException(Order::class, orderId)
+    )
+
+    fun getOrderByNumber(orderNumber: String) = OrderDTO(
+            orderRepository.findFirstByOrderNumber(orderNumber) ?: throw OrderWithNumberNotFoundException(orderNumber)
     )
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }

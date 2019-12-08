@@ -1,5 +1,6 @@
 package bd.clinic.modules.infrastructure
 
+import bd.clinic.modules.infrastructure.exceptions.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -31,5 +32,10 @@ class ExceptionHandlingAdvice {
     @ExceptionHandler(OrderAlreadyExistsException::class)
     fun handleAlreadyExistsOrderNumber(e: OrderAlreadyExistsException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
+    }
+
+    @ExceptionHandler(OrderWithNumberNotFoundException::class)
+    fun handleNotFoundOrder(e: OrderWithNumberNotFoundException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
     }
 }

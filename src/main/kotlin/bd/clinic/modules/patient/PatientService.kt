@@ -1,8 +1,8 @@
 package bd.clinic.modules.patient
 
-import bd.clinic.modules.infrastructure.EntityAlreadyExistsException
-import bd.clinic.modules.infrastructure.EntityIdNullException
-import bd.clinic.modules.infrastructure.EntityNotFoundException
+import bd.clinic.modules.infrastructure.exceptions.EntityAlreadyExistsException
+import bd.clinic.modules.infrastructure.exceptions.EntityIdNullException
+import bd.clinic.modules.infrastructure.exceptions.EntityNotFoundException
 import bd.clinic.modules.patientHistory.PatientHistoryService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
