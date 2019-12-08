@@ -35,7 +35,7 @@ class PatientService(
         return modifiedPatient
     }
 
-    private fun findPatientOrThrow(patientId: Int): Patient =
+    fun findPatientOrThrow(patientId: Int): Patient =
             patientRepository.findByIdOrNull(patientId) ?: throw EntityNotFoundException(Patient::class, patientId)
 
 }
