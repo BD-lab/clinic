@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PatientHistoryRepository : JpaRepository<PatientHistory, Int> {
 
-    fun findAllByPatientId(patient_id: Int): List<PatientHistory>
+    fun findAllByPatientId(patientId: Int): List<PatientHistory>
 }

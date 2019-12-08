@@ -12,13 +12,12 @@ class PatientHistory(
         val id: Int? = null,
 
         @ManyToOne
-        @JoinColumn(name = "patient_id")
         val patient: Patient,
 
         @Column(updatable = false)
         val modifiedOn: LocalDateTime = LocalDateTime.now(),
 
-        val patientBeforeModification: String,
+        val patientBeforeModify: String,
 
-        val patientAfterModification: String
+        val patientAfterModify: String
 )

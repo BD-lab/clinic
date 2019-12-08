@@ -15,6 +15,6 @@ class PatientHistoryController(
     fun getAllPatientsHistory(): List<PatientHistory> = patientHistoryService.getAllPatientsHistory()
 
     @GetMapping("/{patientId}")
-    fun getHistoryForPatient(@PathVariable patientId: Int): List<PatientHistory> = patientHistoryService.getHistoryForPatient(patientId)
+    fun getPatientHistory(@PathVariable patientId: Int): List<PatientHistory> = patientHistoryService.getPatientHistory(patientId)
 
 }

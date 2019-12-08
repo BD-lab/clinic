@@ -22,9 +22,9 @@ class PatientService(
         val patientId = patient.id
         if (patientId != null && patientRepository.findByIdOrNull(patientId) != null)
             throw EntityAlreadyExistsException(Patient::class, patientId)
-        val savedPatient = PatientDTO(patientRepository.save(patient.toPatientEntity()))
-        patientHistoryService.save(null, savedPatient)
-        return savedPatient
+        return PatientDTO(patientRepository.save(patient.toPatientEntity())).also {
+            patientHistoryService.save(patientAfterModify = it)
+        }
     }
 
     fun updatePatient(patient: PatientDTO): PatientDTO {

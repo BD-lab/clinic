@@ -4,6 +4,7 @@ import bd.clinic.modules.infrastructure.EntityNotFoundException
 import bd.clinic.modules.patient.Patient
 import bd.clinic.modules.patient.PatientDTO
 import bd.clinic.modules.patient.PatientRepository
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -14,17 +15,17 @@ class PatientHistoryService(
 ) {
     fun getAllPatientsHistory(): List<PatientHistory> = patientHistoryRepository.findAll()
 
-    fun getHistoryForPatient(patientId: Int): List<PatientHistory> {
+    fun getPatientHistory(patientId: Int): List<PatientHistory> {
         findPatientOrThrow(patientId)
         return patientHistoryRepository.findAllByPatientId(patientId)
     }
 
-    fun save(patientBeforeModify: PatientDTO?, patientAfterModify: PatientDTO): PatientHistory {
+    fun save(patientBeforeModify: PatientDTO? = null, patientAfterModify: PatientDTO): PatientHistory {
         return patientHistoryRepository.save(
                 PatientHistory(
                         patient = patientAfterModify.toPatientEntity(),
-                        patientBeforeModification = patientBeforeModify.toString(),
-                        patientAfterModification = patientAfterModify.toString())
+                        patientBeforeModify = ObjectMapper().writeValueAsString(patientBeforeModify),
+                        patientAfterModify = ObjectMapper().writeValueAsString(patientAfterModify))
         )
     }
 
