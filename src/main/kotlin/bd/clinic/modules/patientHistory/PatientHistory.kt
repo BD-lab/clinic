@@ -1,6 +1,5 @@
 package bd.clinic.modules.patientHistory
 
-import bd.clinic.modules.patient.Patient
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -11,8 +10,7 @@ class PatientHistory(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int? = null,
 
-        @ManyToOne
-        val patient: Patient,
+        val patientId: Int,
 
         @Column(updatable = false)
         val modifiedOn: LocalDateTime = LocalDateTime.now(),
