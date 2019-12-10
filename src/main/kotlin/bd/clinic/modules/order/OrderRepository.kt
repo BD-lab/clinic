@@ -9,9 +9,5 @@ interface OrderRepository : JpaRepository<Order, Int> {
     fun findAllByPatientId(patientId: Int): List<Order>
     fun findByOrderNumber(orderNumber: String): Order?
 
-    @Query(
-            value = "SELECT order_number FROM order_table",
-            nativeQuery = true
-    )
-    fun findAllOrderNumbers(): Set<String>
+    fun existsByOrderNumber(orderNumber: String): Boolean
 }

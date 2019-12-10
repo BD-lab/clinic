@@ -34,8 +34,7 @@ class OrderService(
     }
 
     private fun checkIfOrderNumberIsUnique(orderNumber: String) {
-        val orderNumbers = orderRepository.findAllOrderNumbers()
-        if (orderNumbers.contains(orderNumber))
+        if (orderRepository.existsByOrderNumber(orderNumber))
             throw OrderAlreadyExistsException(orderNumber)
     }
 }
