@@ -1,5 +1,6 @@
 package bd.clinic.modules.patientHistory
 
+import bd.clinic.modules.infrastructure.EntityIdNullException
 import bd.clinic.modules.infrastructure.exceptions.EntityNotFoundException
 import bd.clinic.modules.patient.Patient
 import bd.clinic.modules.patient.PatientDTO
@@ -23,7 +24,7 @@ class PatientHistoryService(
     fun save(patientBeforeModify: PatientDTO? = null, patientAfterModify: PatientDTO): PatientHistory {
         return patientHistoryRepository.save(
                 PatientHistory(
-                        patient = patientAfterModify.toPatientEntity(),
+                        patientId = patientAfterModify.id ?: throw EntityIdNullException(Patient::class),
                         patientBeforeModify = ObjectMapper().writeValueAsString(patientBeforeModify),
                         patientAfterModify = ObjectMapper().writeValueAsString(patientAfterModify))
         )
