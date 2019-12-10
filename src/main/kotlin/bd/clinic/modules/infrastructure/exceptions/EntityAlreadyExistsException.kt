@@ -1,4 +1,4 @@
-package bd.clinic.modules.infrastructure
+package bd.clinic.modules.infrastructure.exceptions
 
 import kotlin.reflect.KClass
 
