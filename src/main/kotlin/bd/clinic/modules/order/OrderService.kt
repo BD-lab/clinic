@@ -17,7 +17,7 @@ class OrderService(
     )
 
     fun getOrderByNumber(orderNumber: String) = OrderDTO(
-            orderRepository.findFirstByOrderNumber(orderNumber) ?: throw OrderWithNumberNotFoundException(orderNumber)
+            orderRepository.findByOrderNumber(orderNumber) ?: throw OrderWithNumberNotFoundException(orderNumber)
     )
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
