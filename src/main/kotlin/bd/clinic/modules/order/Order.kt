@@ -1,6 +1,6 @@
 package bd.clinic.modules.order
 
-import bd.clinic.modules.examination.Examination
+import bd.clinic.modules.examinationInfo.ExaminationInfo
 import bd.clinic.modules.patient.Patient
 import javax.persistence.*
 
@@ -19,5 +19,5 @@ class Order(
 
         @OneToMany(cascade = [CascadeType.ALL])
         @JoinColumn(name = "order_id")
-        val examinations: List<Examination>
+        val examinations: List<ExaminationInfo>
 )

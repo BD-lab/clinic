@@ -1,9 +1,9 @@
-package bd.clinic.modules.examination
+package bd.clinic.modules.examinationInfo
 
 import javax.persistence.*
 
 @Entity
-class Examination(
+class ExaminationInfo(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int? = null,
