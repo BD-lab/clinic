@@ -1,6 +1,7 @@
 package bd.clinic.modules.patient
 
 import bd.clinic.modules.patient.PatientController.Companion.PATIENT_BASE_PATH
+import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -8,7 +9,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping(PATIENT_BASE_PATH)
 class PatientController(
-        private val patientService: PatientService
+        private val patientService: PatientService,
+        private val labServiceClient: LabServiceClient
 ) {
     companion object {
         const val PATIENT_BASE_PATH = "/patients"
@@ -24,7 +26,10 @@ class PatientController(
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun addPatient(@Valid @RequestBody patient: PatientDTO): PatientDTO = patientService.addPatient(patient)
+    fun addPatient(@Valid @RequestBody patient: PatientDTO): PatientDTO {
+        labServiceClient.sendRequest(patient)
+        return patientService.addPatient(patient)
+    }
 
     @PutMapping
     fun updatePatient(@Valid @RequestBody patient: PatientDTO): PatientDTO = patientService.updatePatient(patient)

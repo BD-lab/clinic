@@ -17,3 +17,12 @@ spring:
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     show-sql: true
+
+self:
+  services:
+    first-lab:
+      protocol: http
+      port: 8081
+      ip-addr: 127.0.0.1
+      uris:
+        examinations: /patients
