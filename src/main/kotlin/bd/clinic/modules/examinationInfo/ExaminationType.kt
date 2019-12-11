@@ -1,4 +1,4 @@
-package bd.clinic.modules.examination
+package bd.clinic.modules.examinationInfo
 
 enum class ExaminationType {
     // TODO proper types
