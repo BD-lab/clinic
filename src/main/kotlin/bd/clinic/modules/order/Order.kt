@@ -18,5 +18,6 @@ class Order(
         val patient: Patient,
 
         @OneToMany(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "order_id")
         val examinations: List<Examination>
 )
