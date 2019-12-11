@@ -12,15 +12,11 @@ class OrderController(
         const val ORDER_BASE_PATH = "/orders"
         const val ORDER_PATIENT_PATH = "/patient"
 
-        const val ORDER_ID = "orderId"
+        const val ORDER_NUMBER = "orderNumber"
     }
 
-    @GetMapping("/{$ORDER_ID}")
-    fun getOrder(@PathVariable orderId: Int): OrderDTO = orderService.getOrder(orderId)
-
-    @GetMapping(params = ["orderNumber"])
-    fun getOrderByNumber(@RequestParam(name = "orderNumber") orderNumber: String): OrderDTO =
-            orderService.getOrderByNumber(orderNumber)
+    @GetMapping("/{$ORDER_NUMBER}")
+    fun getOrder(@PathVariable orderNumber: String): OrderDTO = orderService.getOrderByNumber(orderNumber)
 
     @GetMapping
     fun getAllOrders(): List<OrderDTO> = orderService.getAllOrders()

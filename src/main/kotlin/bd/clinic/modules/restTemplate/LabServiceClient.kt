@@ -1,8 +1,7 @@
 package bd.clinic.modules.restTemplate
 
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
-import bd.clinic.modules.patient.PatientDTO
-import com.fasterxml.jackson.databind.ObjectMapper
+import bd.clinic.modules.order.OrderDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -19,10 +18,15 @@ import java.net.URI
 class LabServiceClient @Autowired internal constructor(
         private val restTemplate: RestTemplate,
         @Value("\${self.services.first-lab.protocol}") private val labServiceProtocol: String,
-        @Value("\${self.services.first-lab.port}") private val labServicePort: Int,
         @Value("\${self.services.first-lab.uris.examinations}") private val examinationsUri: String,
         @Value("\${self.services.first-lab.ip-addr}") private val ipAddress: String
 ) {
+
+    companion object {
+
+        val infrastructurePortMap = mapOf(1 to 8081)
+
+    }
 
     private fun <T> call(action: () -> ResponseEntity<T>): T? {
         try {
@@ -35,9 +39,15 @@ class LabServiceClient @Autowired internal constructor(
         }
     }
 
-    fun sendRequest(patient: PatientDTO): PatientDTO? {
+    fun sendRequest(orderDTO: OrderDTO, port: Int): OrderDTO? {
         return call {
-            restTemplate.exchange(getUrl(prepareUrl()), HttpMethod.POST, HttpEntity(patient), PatientDTO::class.java)
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.POST, HttpEntity(orderDTO), OrderDTO::class.java)
+        }
+    }
+
+    fun sendRequest(orderNumber: String, port: Int): OrderDTO? {
+        return call {
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.GET, HttpEntity(orderNumber), OrderDTO::class.java)
         }
     }
 
@@ -45,8 +55,8 @@ class LabServiceClient @Autowired internal constructor(
         return UriComponentsBuilder.fromHttpUrl(preparedUrl).build().toUri()
     }
 
-    private fun prepareUrl(): String {
-        return "$labServiceProtocol://$ipAddress:$labServicePort$examinationsUri"
+    private fun prepareUrl(port: Int): String {
+        return "$labServiceProtocol://$ipAddress:$port$examinationsUri"
     }
 
     private fun messageOf(e: Exception): String {

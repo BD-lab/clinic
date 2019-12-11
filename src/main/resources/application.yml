@@ -22,7 +22,6 @@ self:
   services:
     first-lab:
       protocol: http
-      port: 8081
       ip-addr: 127.0.0.1
       uris:
-        examinations: /patients
+        examinations: /examinations
