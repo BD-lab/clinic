@@ -1,7 +1,9 @@
 package bd.clinic.modules.restTemplate
 
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
+import bd.clinic.modules.order.ExaminationResultDTO
 import bd.clinic.modules.order.OrderDTO
+import bd.clinic.modules.order.OrderResultDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -13,6 +15,7 @@ import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
+
 
 @Service
 class LabServiceClient @Autowired internal constructor(
@@ -39,16 +42,30 @@ class LabServiceClient @Autowired internal constructor(
         }
     }
 
-    fun sendRequest(orderDTO: OrderDTO, port: Int): OrderDTO? {
+    fun sendRequest(orderDTO: OrderDTO, port: Int): Unit? {
         return call {
-            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.POST, HttpEntity(orderDTO), OrderDTO::class.java)
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
         }
     }
 
-    fun sendRequest(orderNumber: String, port: Int): OrderDTO? {
-        return call {
-            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.GET, HttpEntity(orderNumber), OrderDTO::class.java)
+/*    fun sendRequest(orderNumber: String, port: Int): List<ExaminationResultDTO>? {
+        val response = call {
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.GET, HttpEntity(orderNumber), List::class.java)
         }
+        return response as? List<ExaminationResultDTO>
+    }*/
+
+/*    fun sendRequest(orderNumber: String, port: Int): OrderResultDTO? {
+        return call {
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.GET, HttpEntity(orderNumber), OrderResultDTO::class.java)
+        }
+    }*/
+
+    fun sendRequest(orderNumber: String, port: Int): List<ExaminationResultDTO>? {
+        val response = call {
+            restTemplate.exchange(getUrl(prepareUrl(port)), HttpMethod.GET, HttpEntity(orderNumber), List::class.java)
+        }
+        return response?.filterIsInstance<ExaminationResultDTO>()
     }
 
     fun getUrl(preparedUrl: String): URI {

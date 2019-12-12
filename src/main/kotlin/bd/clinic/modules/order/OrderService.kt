@@ -1,13 +1,10 @@
 package bd.clinic.modules.order
 
-import bd.clinic.modules.examination.ExaminationDTO
-import bd.clinic.modules.infrastructure.exceptions.EntityNotFoundException
 import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
 import bd.clinic.modules.infrastructure.exceptions.OrderNotReadyException
 import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
 import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabServiceClient
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,19 +13,15 @@ class OrderService(
         private val patientService: PatientService,
         private val labServiceClient: LabServiceClient
 ) {
-    fun getOrder(orderId: Int) = OrderDTO(
-            orderRepository.findByIdOrNull(orderId) ?: throw EntityNotFoundException(Order::class, orderId)
-    )
 
-    fun getOrderByNumber(orderNumber: String): OrderDTO {
+    fun getOrderByNumber(orderNumber: String): OrderResultDTO {
         val orderDTO = OrderDTO(orderRepository.findByOrderNumber(orderNumber)
                 ?: throw OrderWithNumberNotFoundException(orderNumber)
         )
-        val returnOrder = sendGetRequestToAllLaboratories(orderDTO)
-        if (checkIfOrderContainsAllExaminations(returnOrder))
-            return returnOrder
+        val returnOrderResult = getOrderResultFromLaboratories(orderDTO)
+        checkIfOrderContainsAllExaminations(returnOrderResult)
 
-        throw OrderNotReadyException(orderNumber)
+        return returnOrderResult
     }
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
@@ -41,13 +34,13 @@ class OrderService(
     fun addPatientOrder(order: OrderDTO): OrderDTO {
         checkIfOrderNumberIsUnique(order.orderNumber)
         val patient = patientService.findPatientOrThrow(order.patientId)
-        sendPostRequestToAllLaboratories(order)
+        saveOrderInLaboratories(order)
 
         return OrderDTO(orderRepository.save(order.toOrderEntity(patient)))
     }
 
-    private fun sendPostRequestToAllLaboratories(orderDTO: OrderDTO) {
-        LabServiceClient.infrastructurePortMap.forEach { (laboratoryId, port) ->
+    private fun saveOrderInLaboratories(orderDTO: OrderDTO) {
+        LabServiceClient.infrastructurePortMap.entries.parallelStream().forEach { (laboratoryId, port) ->
             val infrastructureOrder = orderDTO.copy(
                     examinations = orderDTO.examinations.filter { it.laboratoryId == laboratoryId })
             if (infrastructureOrder.examinations.isNotEmpty())
@@ -55,16 +48,16 @@ class OrderService(
         }
     }
 
-    private fun sendGetRequestToAllLaboratories(orderDTO: OrderDTO): OrderDTO {
-        val examinationResultList = mutableListOf<ExaminationDTO>()
+    private fun getOrderResultFromLaboratories(orderDTO: OrderDTO): OrderResultDTO {
+        val examinationResultList = mutableListOf<ExaminationResultDTO>()
         val laboratoriesList = orderDTO.examinations.map { it.laboratoryId }.distinct()
 
-        laboratoriesList.forEach {
+        laboratoriesList.parallelStream().forEach {
             labServiceClient.sendRequest(orderDTO.orderNumber, LabServiceClient.infrastructurePortMap.getValue(it))
-                    ?.examinations?.let { examResult -> examinationResultList.addAll(examResult) }
+                    ?.let { examResult -> examinationResultList.addAll(examResult) }
         }
 
-        return orderDTO.copy(examinations = examinationResultList)
+        return orderDTO.toOrderResultDTO(examinationResultList)
     }
 
     private fun checkIfOrderNumberIsUnique(orderNumber: String) {
@@ -72,8 +65,9 @@ class OrderService(
             throw OrderAlreadyExistsException(orderNumber)
     }
 
-    private fun checkIfOrderContainsAllExaminations(returnOrder: OrderDTO): Boolean {
-        return returnOrder.examinations.filter { it.isDone }.count() == returnOrder.examinations.size
+    private fun checkIfOrderContainsAllExaminations(returnOrderResult: OrderResultDTO) {
+        if (returnOrderResult.examinations.filter { it.isDone }.count() == returnOrderResult.examinations.size)
+            throw OrderNotReadyException(returnOrderResult.orderNumber)
     }
 
 }
