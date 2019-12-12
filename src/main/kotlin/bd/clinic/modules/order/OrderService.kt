@@ -66,7 +66,7 @@ class OrderService(
     }
 
     private fun checkIfOrderContainsAllExaminations(returnOrderResult: OrderResultDTO) {
-        if (returnOrderResult.examinations.filter { it.isDone }.count() == returnOrderResult.examinations.size)
+        if (returnOrderResult.examinations.filter { it.isDone }.count() != returnOrderResult.examinations.size)
             throw OrderNotReadyException(returnOrderResult.orderNumber)
     }
 

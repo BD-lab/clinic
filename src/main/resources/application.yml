@@ -25,3 +25,4 @@ self:
       ip-addr: 127.0.0.1
       uris:
         examinations: /examinations
+        order: /order
