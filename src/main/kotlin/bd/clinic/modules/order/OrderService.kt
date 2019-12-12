@@ -34,9 +34,8 @@ class OrderService(
     fun addPatientOrder(order: OrderDTO): OrderDTO {
         checkIfOrderNumberIsUnique(order.orderNumber)
         val patient = patientService.findPatientOrThrow(order.patientId)
-        saveOrderInLaboratories(order)
 
-        return OrderDTO(orderRepository.save(order.toOrderEntity(patient)))
+        return OrderDTO(orderRepository.save(order.toOrderEntity(patient))).also { saveOrderInLaboratories(it) }
     }
 
     private fun saveOrderInLaboratories(orderDTO: OrderDTO) {
