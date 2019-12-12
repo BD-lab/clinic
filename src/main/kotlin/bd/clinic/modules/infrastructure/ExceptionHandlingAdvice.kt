@@ -38,4 +38,14 @@ class ExceptionHandlingAdvice {
     fun handleNotFoundOrder(e: OrderWithNumberNotFoundException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
     }
+
+    @ExceptionHandler(OrderNotReadyException::class)
+    fun handleOrderNotReadyException(e: EntityIdNullException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+    }
+
+    @ExceptionHandler(LabServiceClientException::class)
+    fun handleLabServiceClientException(e: EntityIdNullException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message + e.cause)
+    }
 }

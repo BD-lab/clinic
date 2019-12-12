@@ -23,4 +23,10 @@ data class OrderDTO(
             patient = patient,
             examinations = this.examinations.map { it.toExaminationEntity() }
     )
+
+    fun toOrderResultDTO(examinations: List<ExaminationResultDTO>) = OrderResultDTO(
+            orderNumber = this.orderNumber,
+            patientId = this.patientId,
+            examinations = examinations
+    )
 }
