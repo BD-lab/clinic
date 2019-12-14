@@ -28,13 +28,9 @@ class OrderService(
         return orderResult
     }
 
-    fun printOrderResult(orderNumber: String): OrderResultDTO {
-        val orderResult = getOrderResultByNumber(orderNumber)
-        val printer = PrintResults(orderResult)
-        printer.print()
-
-        return orderResult
-    }
+    fun getAndPrintOrderResult(orderNumber: String): OrderResultDTO =
+            getOrderResultByNumber(orderNumber)
+                    .also { Thread(Runnable { printOrderResult(it) }).start() }
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
 
@@ -73,12 +69,17 @@ class OrderService(
         return orderDTO.toOrderResultDTO(examinationResultList, patientDTO)
     }
 
+    private fun printOrderResult(orderResult: OrderResultDTO) {
+        val printer = PrintResults(orderResult)
+        printer.print()
+    }
+
     private fun checkIfOrderNumberIsUnique(orderNumber: String) {
         if (orderRepository.existsByOrderNumber(orderNumber))
             throw OrderAlreadyExistsException(orderNumber)
     }
 
-    private fun checkIfOrderContainsAllDoneExaminations(orderResult : OrderResultDTO) {
+    private fun checkIfOrderContainsAllDoneExaminations(orderResult: OrderResultDTO) {
         if (!orderResult.examinations.all { it.isDone })
             throw OrderNotReadyException(orderResult.orderNumber)
     }
