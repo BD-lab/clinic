@@ -43,7 +43,7 @@ object ExaminationTypeTranslator {
         RICE -> "Ryż"
         SOY -> "Soja"
         PEANUT -> "Orzech ziemny"
-        HEZELNUT -> "Orzech laskowy"
+        HAZELNUT -> "Orzech laskowy"
         CARROT -> "Marchewka"
         POTATO -> "Ziemniak"
         APPLE -> "Jabłko"

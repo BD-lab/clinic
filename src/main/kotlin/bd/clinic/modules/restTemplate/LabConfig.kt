@@ -46,7 +46,7 @@ object LabConfig {
             RICE to 3,
             SOY to 3,
             PEANUT to 3,
-            HEZELNUT to 3,
+            HAZELNUT to 3,
             CARROT to 3,
             POTATO to 3,
             APPLE to 3)

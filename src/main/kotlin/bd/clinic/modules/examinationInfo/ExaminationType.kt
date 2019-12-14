@@ -40,7 +40,7 @@ enum class ExaminationType(val unit: String, val minNormValue: Double, val maxNo
     RICE("kU/I", 0.0, 0.7),
     SOY("kU/I", 0.0, 0.7),
     PEANUT("kU/I", 0.0, 0.7),
-    HEZELNUT("kU/I", 0.0, 0.7),
+    HAZELNUT("kU/I", 0.0, 0.7),
     CARROT("kU/I", 0.0, 0.7),
     POTATO("kU/I", 0.0, 0.7),
     APPLE("kU/I", 0.0, 0.7)
