@@ -44,7 +44,7 @@ class OrderService(
             val infrastructureOrder = orderDTO.copy(
                     examinations = orderDTO.examinations.filter { it.laboratoryId == laboratoryId })
             if (infrastructureOrder.examinations.isNotEmpty())
-                labServiceClient.sendRequest(infrastructureOrder, serverInfo.port)
+                labServiceClient.sendRequest(infrastructureOrder, serverInfo.port, serverInfo.ipAddr)
         }
     }
 
@@ -54,7 +54,8 @@ class OrderService(
 
         laboratoriesList.parallelStream().forEach {
             labServiceClient.sendRequest(orderDTO.orderNumber, (LabConfig.laboratoryServerInfoMap[it]
-                    ?: error("Unknown port!")).port)
+                    ?: error("Unknown port!")).port, (LabConfig.laboratoryServerInfoMap[it]
+                    ?: error("Unknown ip address!")).ipAddr)
                     ?.let { examResult -> examinationResultList.addAll(examResult) }
         }
 

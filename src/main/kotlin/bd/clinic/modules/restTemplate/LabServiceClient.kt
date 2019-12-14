@@ -23,8 +23,7 @@ class LabServiceClient @Autowired internal constructor(
         private val gson: Gson,
         @Value("\${self.services.first-lab.protocol}") private val labServiceProtocol: String,
         @Value("\${self.services.first-lab.uris.examinations}") private val examinationsUri: String,
-        @Value("\${self.services.first-lab.uris.order}") private val orderUri: String,
-        @Value("\${self.services.first-lab.ip-addr}") private val ipAddress: String
+        @Value("\${self.services.first-lab.uris.order}") private val orderUri: String
 ) {
 
     private fun <T> call(action: () -> ResponseEntity<T>): T? {
@@ -38,15 +37,15 @@ class LabServiceClient @Autowired internal constructor(
         }
     }
 
-    fun sendRequest(orderDTO: OrderDTO, port: Int): Unit? {
+    fun sendRequest(orderDTO: OrderDTO, port: Int, ipAddress: String): Unit? {
         return call {
-            restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
+            restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port, ipAddress)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
         }
     }
 
-    fun sendRequest(orderNumber: String, port: Int): List<ExaminationResultDTO>? {
+    fun sendRequest(orderNumber: String, port: Int, ipAddress: String): List<ExaminationResultDTO>? {
         val response = call {
-            restTemplate.exchange(getUrl(prepareUrlToGetResults(port)), HttpMethod.POST, HttpEntity(orderNumber), String::class.java)
+            restTemplate.exchange(getUrl(prepareUrlToGetResults(port, ipAddress)), HttpMethod.POST, HttpEntity(orderNumber), String::class.java)
         }
         val type = object : TypeToken<List<ExaminationResultDTO>>() {}
 
@@ -57,11 +56,11 @@ class LabServiceClient @Autowired internal constructor(
         return UriComponentsBuilder.fromHttpUrl(preparedUrl).build().toUri()
     }
 
-    private fun prepareUrlToSaveOrder(port: Int): String {
+    private fun prepareUrlToSaveOrder(port: Int, ipAddress: String): String {
         return "$labServiceProtocol://$ipAddress:$port$examinationsUri"
     }
 
-    private fun prepareUrlToGetResults(port: Int): String {
+    private fun prepareUrlToGetResults(port: Int, ipAddress: String): String {
         return "$labServiceProtocol://$ipAddress:$port$examinationsUri$orderUri"
     }
 
