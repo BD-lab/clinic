@@ -1,26 +1,23 @@
 package bd.clinic.modules.patient
 
-import bd.clinic.modules.patient.PatientController.Companion.PATIENT_BASE_PATH
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping(PATIENT_BASE_PATH)
+@RequestMapping("/patients")
 class PatientController(
         private val patientService: PatientService
 ) {
-    companion object {
-        const val PATIENT_BASE_PATH = "/patients"
-
-        const val PATIENT_ID = "patientId"
-    }
-
     @GetMapping
     fun getAllPatients(): List<PatientDTO> = patientService.getAllPatients()
 
-    @GetMapping("/{$PATIENT_ID}")
+    @GetMapping("/{patientId}")
     fun getPatient(@PathVariable patientId: Int): PatientDTO = patientService.getPatient(patientId)
+
+    @GetMapping(params = ["pesel"])
+    fun getPatientByPesel(@RequestParam("pesel") pesel: String): PatientDTO
+            = patientService.getPatientByPesel(pesel)
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)

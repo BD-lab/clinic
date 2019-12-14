@@ -2,6 +2,7 @@ package bd.clinic.modules.order
 
 import bd.clinic.modules.examinationInfo.ExaminationInfoDTO
 import bd.clinic.modules.infrastructure.exceptions.EntityIdNullException
+import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.patient.Patient
 
 data class OrderDTO(

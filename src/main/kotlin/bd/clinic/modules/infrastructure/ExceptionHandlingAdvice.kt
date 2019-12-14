@@ -48,4 +48,14 @@ class ExceptionHandlingAdvice {
     fun handleLabServiceClientException(e: EntityIdNullException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message + e.cause)
     }
+
+    @ExceptionHandler(PatientPeselNotFoundException::class)
+    fun handleNotFoundPatientPesel(e: PatientPeselNotFoundException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+    }
+
+    @ExceptionHandler(PatientPeselAlreadyExistsException::class)
+    fun handleAlreadyExistsPatientPesel(e: PatientPeselAlreadyExistsException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
+    }
 }

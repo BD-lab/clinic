@@ -1,5 +1,7 @@
 package bd.clinic.modules.order
 
+import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
+
 data class OrderResultDTO(
 
         val orderNumber: String,
