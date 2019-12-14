@@ -1,6 +1,6 @@
 package bd.clinic.modules.order
 
-import bd.clinic.modules.examination.ExaminationType
+import bd.clinic.modules.examinationInfo.ExaminationType
 
 data class ExaminationResultDTO(
 

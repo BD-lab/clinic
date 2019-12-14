@@ -11,7 +11,5 @@ class ExaminationInfo(
         val laboratoryId: Int,
 
         @Enumerated(EnumType.STRING)
-        val type: ExaminationType,
-
-        val isDone: Boolean = false
+        val type: ExaminationType
 )

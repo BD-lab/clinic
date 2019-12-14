@@ -27,12 +27,6 @@ class LabServiceClient @Autowired internal constructor(
         @Value("\${self.services.first-lab.ip-addr}") private val ipAddress: String
 ) {
 
-    companion object {
-
-        val infrastructurePortMap = mapOf(1 to 8081)
-
-    }
-
     private fun <T> call(action: () -> ResponseEntity<T>): T? {
         try {
             val response = action.invoke()
