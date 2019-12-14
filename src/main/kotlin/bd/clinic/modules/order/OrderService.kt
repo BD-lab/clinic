@@ -79,7 +79,7 @@ class OrderService(
     }
 
     private fun checkIfOrderContainsAllDoneExaminations(orderResult : OrderResultDTO) {
-        if (orderResult.examinations.count { it.isDone } != orderResult.examinations.size)
+        if (!orderResult.examinations.all { it.isDone })
             throw OrderNotReadyException(orderResult.orderNumber)
     }
 }
