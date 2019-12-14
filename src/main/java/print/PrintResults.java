@@ -1,6 +1,7 @@
 
 package print;
 
+import bd.clinic.modules.examinationInfo.ExaminationTypeTranslator;
 import bd.clinic.modules.order.OrderResultDTO;
 import bd.clinic.modules.order.examinationResult.ExaminationResultDTO;
 
@@ -42,7 +43,9 @@ public class PrintResults extends PrintModel {
         for(ExaminationResultDTO e : order.getExaminations()){
             ret.append("<tr style=\"border-bottom-style:solid;border-bottom-color:black;border-bottom-width:2px;\">");
                 ret.append("<td><div id=\"result1\">");   
-                ret.append("<b>").append(e.getExaminationType()).append("</b>");
+                ret.append("<b>").append(
+                        ExaminationTypeTranslator.INSTANCE.translateToPolish(e.getExaminationType())
+                ).append("</b>");
                 ret.append("</td></div>");
 
                 ret.append("<td><div id=\"result2\">");   
