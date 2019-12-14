@@ -14,8 +14,7 @@ class OrderController(
 
     @GetMapping("/result/{orderNumber}/print")
     fun printOrderResult(@PathVariable orderNumber: String): OrderResultDTO =
-            orderService.getOrderResultByNumber(orderNumber)
-                    .also { Thread(Runnable { orderService.printOrderResult(it) }).start() }
+            orderService.getAndPrintOrderResult(orderNumber)
 
     @GetMapping
     fun getAllOrders(): List<OrderDTO> = orderService.getAllOrders()

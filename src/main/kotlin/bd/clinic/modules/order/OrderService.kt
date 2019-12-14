@@ -28,10 +28,9 @@ class OrderService(
         return orderResult
     }
 
-    fun printOrderResult(orderResult: OrderResultDTO) {
-        val printer = PrintResults(orderResult)
-        printer.print()
-    }
+    fun getAndPrintOrderResult(orderNumber: String): OrderResultDTO =
+            getOrderResultByNumber(orderNumber)
+                    .also { Thread(Runnable { printOrderResult(it) }).start() }
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
 
@@ -68,6 +67,11 @@ class OrderService(
         }
 
         return orderDTO.toOrderResultDTO(examinationResultList, patientDTO)
+    }
+
+    private fun printOrderResult(orderResult: OrderResultDTO) {
+        val printer = PrintResults(orderResult)
+        printer.print()
     }
 
     private fun checkIfOrderNumberIsUnique(orderNumber: String) {
