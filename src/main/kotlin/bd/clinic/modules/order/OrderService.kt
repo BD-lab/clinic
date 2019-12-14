@@ -28,12 +28,9 @@ class OrderService(
         return orderResult
     }
 
-    fun printOrderResult(orderNumber: String): OrderResultDTO {
-        val orderResult = getOrderResultByNumber(orderNumber)
+    fun printOrderResult(orderResult: OrderResultDTO) {
         val printer = PrintResults(orderResult)
         printer.print()
-
-        return orderResult
     }
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
@@ -78,7 +75,7 @@ class OrderService(
             throw OrderAlreadyExistsException(orderNumber)
     }
 
-    private fun checkIfOrderContainsAllDoneExaminations(orderResult : OrderResultDTO) {
+    private fun checkIfOrderContainsAllDoneExaminations(orderResult: OrderResultDTO) {
         if (!orderResult.examinations.all { it.isDone })
             throw OrderNotReadyException(orderResult.orderNumber)
     }
