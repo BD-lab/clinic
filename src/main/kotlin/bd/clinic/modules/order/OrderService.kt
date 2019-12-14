@@ -9,6 +9,7 @@ import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabConfig
 import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.stereotype.Service
+import print.PrintResults
 
 @Service
 class OrderService(
@@ -22,7 +23,15 @@ class OrderService(
         )
         val patientDTO = patientService.getPatient(orderDTO.patientId)
         val orderResult = getOrderResultFromLaboratories(orderDTO, patientDTO)
-        checkIfOrderContainsAllExaminations(orderResult)
+        checkIfOrderContainsAllDoneExaminations(orderResult)
+
+        return orderResult
+    }
+
+    fun printOrderResult(orderNumber: String): OrderResultDTO {
+        val orderResult = getOrderResultByNumber(orderNumber)
+        val printer = PrintResults(orderResult)
+        printer.print()
 
         return orderResult
     }
@@ -69,9 +78,8 @@ class OrderService(
             throw OrderAlreadyExistsException(orderNumber)
     }
 
-    private fun checkIfOrderContainsAllExaminations(returnOrderResult: OrderResultDTO) {
-        if (returnOrderResult.examinations.filter { it.isDone }.count() != returnOrderResult.examinations.size)
-            throw OrderNotReadyException(returnOrderResult.orderNumber)
+    private fun checkIfOrderContainsAllDoneExaminations(orderResult : OrderResultDTO) {
+        if (orderResult.examinations.count { it.isDone } != orderResult.examinations.size)
+            throw OrderNotReadyException(orderResult.orderNumber)
     }
-
 }

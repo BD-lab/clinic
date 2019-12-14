@@ -1,11 +1,12 @@
 package bd.clinic
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 
 @SpringBootApplication
 class ClinicApplication
 
 fun main(args: Array<String>) {
-	runApplication<ClinicApplication>(*args)
+	val builder = SpringApplicationBuilder(ClinicApplication::class.java)
+	builder.headless(false).run(*args)
 }
