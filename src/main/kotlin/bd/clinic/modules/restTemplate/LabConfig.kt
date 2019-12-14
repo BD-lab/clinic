@@ -27,7 +27,7 @@ object LabConfig {
             KETONE to 2,
             BLOOD to 2,
             PROTEIN to 2,
-            pH to 2,
+            PH to 2,
 
             //ALLERGY
             GRASS to 3,
@@ -35,7 +35,7 @@ object LabConfig {
             WORMWOOD to 3,
             CAT to 3,
             DOG to 3,
-            CALDOSPORIUM to 3,
+            CLADOSPORIUM to 3,
             ALTERNARIA to 3,
             EGG_WHITE to 3,
             EGG_YOLK to 3,
@@ -46,7 +46,7 @@ object LabConfig {
             RICE to 3,
             SOY to 3,
             PEANUT to 3,
-            HEZELNUT to 3,
+            HAZELNUT to 3,
             CARROT to 3,
             POTATO to 3,
             APPLE to 3)

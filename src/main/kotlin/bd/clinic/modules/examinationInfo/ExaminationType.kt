@@ -21,7 +21,7 @@ enum class ExaminationType(val unit: String, val minNormValue: Double, val maxNo
     KETONE("mg/dL", 0.0, 300.0),
     BLOOD("Ery/uL", 0.0, 200.0),
     PROTEIN("mg/dL", 0.0, 2000.0),
-    pH("", 5.0, 8.5),
+    PH("", 5.0, 8.5),
 
     //ALLERGY
     GRASS("kU/I", 0.0, 0.7),
@@ -29,7 +29,7 @@ enum class ExaminationType(val unit: String, val minNormValue: Double, val maxNo
     WORMWOOD("kU/I", 0.0, 0.7), //bylica
     CAT("kU/I", 0.0, 0.7),
     DOG("kU/I", 0.0, 0.7),
-    CALDOSPORIUM("kU/I", 0.0, 0.7),
+    CLADOSPORIUM("kU/I", 0.0, 0.7),
     ALTERNARIA("kU/I", 0.0, 0.7),
     EGG_WHITE("kU/I", 0.0, 0.7),
     EGG_YOLK("kU/I", 0.0, 0.7),
@@ -40,7 +40,7 @@ enum class ExaminationType(val unit: String, val minNormValue: Double, val maxNo
     RICE("kU/I", 0.0, 0.7),
     SOY("kU/I", 0.0, 0.7),
     PEANUT("kU/I", 0.0, 0.7),
-    HEZELNUT("kU/I", 0.0, 0.7),
+    HAZELNUT("kU/I", 0.0, 0.7),
     CARROT("kU/I", 0.0, 0.7),
     POTATO("kU/I", 0.0, 0.7),
     APPLE("kU/I", 0.0, 0.7)
