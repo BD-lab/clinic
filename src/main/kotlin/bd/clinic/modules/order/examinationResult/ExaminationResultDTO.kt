@@ -1,4 +1,4 @@
-package bd.clinic.modules.order
+package bd.clinic.modules.order.examinationResult
 
 import bd.clinic.modules.examinationInfo.ExaminationType
 

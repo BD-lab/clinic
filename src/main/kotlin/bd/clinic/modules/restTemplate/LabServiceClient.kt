@@ -1,7 +1,7 @@
 package bd.clinic.modules.restTemplate
 
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
-import bd.clinic.modules.order.ExaminationResultDTO
+import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.order.OrderDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

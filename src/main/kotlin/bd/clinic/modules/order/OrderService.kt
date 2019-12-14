@@ -3,6 +3,7 @@ package bd.clinic.modules.order
 import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
 import bd.clinic.modules.infrastructure.exceptions.OrderNotReadyException
 import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
+import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.stereotype.Service
@@ -13,15 +14,14 @@ class OrderService(
         private val patientService: PatientService,
         private val labServiceClient: LabServiceClient
 ) {
-
-    fun getOrderByNumber(orderNumber: String): OrderResultDTO {
+    fun getOrderResultByNumber(orderNumber: String): OrderResultDTO {
         val orderDTO = OrderDTO(orderRepository.findByOrderNumber(orderNumber)
                 ?: throw OrderWithNumberNotFoundException(orderNumber)
         )
-        val returnOrderResult = getOrderResultFromLaboratories(orderDTO)
-        checkIfOrderContainsAllExaminations(returnOrderResult)
+        val orderResult = getOrderResultFromLaboratories(orderDTO)
+        checkIfOrderContainsAllExaminations(orderResult)
 
-        return returnOrderResult
+        return orderResult
     }
 
     fun getAllOrders(): List<OrderDTO> = orderRepository.findAll().map { OrderDTO(it) }
