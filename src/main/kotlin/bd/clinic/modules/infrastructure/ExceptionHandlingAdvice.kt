@@ -40,8 +40,8 @@ class ExceptionHandlingAdvice {
     }
 
     @ExceptionHandler(OrderNotReadyException::class)
-    fun handleOrderNotReadyException(e: EntityIdNullException): ResponseEntity<*> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+    fun handleOrderNotReadyException(e: OrderNotReadyException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
     }
 
     @ExceptionHandler(LabServiceClientException::class)
