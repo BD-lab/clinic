@@ -1,6 +1,7 @@
 package bd.clinic.modules.order
 
 import bd.clinic.modules.order.OrderController.Companion.ORDER_BASE_PATH
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -26,5 +27,6 @@ class OrderController(
             orderService.getAllPatientOrders(patientId)
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun addPatientOrder(@RequestBody order: OrderDTO): OrderDTO = orderService.addPatientOrder(order)
 }

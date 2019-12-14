@@ -22,6 +22,10 @@ class PatientController(
     @GetMapping("/{$PATIENT_ID}")
     fun getPatient(@PathVariable patientId: Int): PatientDTO = patientService.getPatient(patientId)
 
+    @GetMapping(params = ["pesel"])
+    fun getPatientByPesel(@RequestParam("pesel") pesel: String): PatientDTO
+            = patientService.getPatientByPesel(pesel)
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     fun addPatient(@Valid @RequestBody patient: PatientDTO): PatientDTO = patientService.addPatient(patient)
