@@ -4,6 +4,7 @@ import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
 import bd.clinic.modules.infrastructure.exceptions.OrderNotReadyException
 import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
 import bd.clinic.modules.patient.PatientService
+import bd.clinic.modules.restTemplate.LabConfig
 import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.stereotype.Service
 
@@ -39,11 +40,11 @@ class OrderService(
     }
 
     private fun saveOrderInLaboratories(orderDTO: OrderDTO) {
-        LabServiceClient.infrastructurePortMap.entries.parallelStream().forEach { (laboratoryId, port) ->
+        LabConfig.laboratoryServerInfoMap.entries.parallelStream().forEach { (laboratoryId, serverInfo) ->
             val infrastructureOrder = orderDTO.copy(
                     examinations = orderDTO.examinations.filter { it.laboratoryId == laboratoryId })
             if (infrastructureOrder.examinations.isNotEmpty())
-                labServiceClient.sendRequest(infrastructureOrder, port)
+                labServiceClient.sendRequest(infrastructureOrder, serverInfo.port, serverInfo.ipAddr)
         }
     }
 
@@ -52,7 +53,9 @@ class OrderService(
         val laboratoriesList = orderDTO.examinations.map { it.laboratoryId }.distinct()
 
         laboratoriesList.parallelStream().forEach {
-            labServiceClient.sendRequest(orderDTO.orderNumber, LabServiceClient.infrastructurePortMap.getValue(it))
+            labServiceClient.sendRequest(orderDTO.orderNumber, (LabConfig.laboratoryServerInfoMap[it]
+                    ?: error("Unknown port!")).port, (LabConfig.laboratoryServerInfoMap[it]
+                    ?: error("Unknown ip address!")).ipAddr)
                     ?.let { examResult -> examinationResultList.addAll(examResult) }
         }
 
