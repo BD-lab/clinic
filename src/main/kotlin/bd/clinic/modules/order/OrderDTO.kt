@@ -4,6 +4,7 @@ import bd.clinic.modules.examinationInfo.ExaminationInfoDTO
 import bd.clinic.modules.infrastructure.exceptions.EntityIdNullException
 import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.patient.Patient
+import bd.clinic.modules.patient.PatientDTO
 
 data class OrderDTO(
         val id: Int? = null,
@@ -25,9 +26,9 @@ data class OrderDTO(
             examinations = this.examinations.map { it.toExaminationEntity() }
     )
 
-    fun toOrderResultDTO(examinations: List<ExaminationResultDTO>) = OrderResultDTO(
+    fun toOrderResultDTO(examinations: List<ExaminationResultDTO>, patientDTO: PatientDTO) = OrderResultDTO(
             orderNumber = this.orderNumber,
-            patientId = this.patientId,
+            patient = patientDTO,
             examinations = examinations
     )
 }

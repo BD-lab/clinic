@@ -4,6 +4,7 @@ import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
 import bd.clinic.modules.infrastructure.exceptions.OrderNotReadyException
 import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
 import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
+import bd.clinic.modules.patient.PatientDTO
 import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabConfig
 import bd.clinic.modules.restTemplate.LabServiceClient
@@ -19,7 +20,8 @@ class OrderService(
         val orderDTO = OrderDTO(orderRepository.findByOrderNumber(orderNumber)
                 ?: throw OrderWithNumberNotFoundException(orderNumber)
         )
-        val orderResult = getOrderResultFromLaboratories(orderDTO)
+        val patientDTO = patientService.getPatient(orderDTO.patientId)
+        val orderResult = getOrderResultFromLaboratories(orderDTO, patientDTO)
         checkIfOrderContainsAllExaminations(orderResult)
 
         return orderResult
@@ -48,7 +50,7 @@ class OrderService(
         }
     }
 
-    private fun getOrderResultFromLaboratories(orderDTO: OrderDTO): OrderResultDTO {
+    private fun getOrderResultFromLaboratories(orderDTO: OrderDTO, patientDTO: PatientDTO): OrderResultDTO {
         val examinationResultList = mutableListOf<ExaminationResultDTO>()
         val laboratoriesList = orderDTO.examinations.map { it.laboratoryId }.distinct()
 
@@ -59,7 +61,7 @@ class OrderService(
                     ?.let { examResult -> examinationResultList.addAll(examResult) }
         }
 
-        return orderDTO.toOrderResultDTO(examinationResultList)
+        return orderDTO.toOrderResultDTO(examinationResultList, patientDTO)
     }
 
     private fun checkIfOrderNumberIsUnique(orderNumber: String) {
