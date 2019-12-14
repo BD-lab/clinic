@@ -3,13 +3,13 @@ package bd.clinic.modules.order
 import bd.clinic.modules.infrastructure.exceptions.OrderAlreadyExistsException
 import bd.clinic.modules.infrastructure.exceptions.OrderNotReadyException
 import bd.clinic.modules.infrastructure.exceptions.OrderWithNumberNotFoundException
-import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.patient.PatientDTO
 import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabConfig
 import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.stereotype.Service
 import print.PrintResults
+import kotlin.streams.toList
 
 @Service
 class OrderService(
@@ -56,15 +56,14 @@ class OrderService(
     }
 
     private fun getOrderResultFromLaboratories(orderDTO: OrderDTO, patientDTO: PatientDTO): OrderResultDTO {
-        val examinationResultList = mutableListOf<ExaminationResultDTO>()
         val laboratoriesList = orderDTO.examinations.map { it.laboratoryId }.distinct()
 
-        laboratoriesList.parallelStream().forEach {
-            labServiceClient.sendRequest(orderDTO.orderNumber, (LabConfig.laboratoryServerInfoMap[it]
-                    ?: error("Unknown port!")).port, (LabConfig.laboratoryServerInfoMap[it]
+        val examinationResultList = laboratoriesList.parallelStream().flatMap { labId ->
+            labServiceClient.sendRequest(orderDTO.orderNumber, (LabConfig.laboratoryServerInfoMap[labId]
+                    ?: error("Unknown port!")).port, (LabConfig.laboratoryServerInfoMap[labId]
                     ?: error("Unknown ip address!")).ipAddr)
-                    ?.let { examResult -> examinationResultList.addAll(examResult) }
-        }
+                    ?.map { it }?.parallelStream()
+        }.toList()
 
         return orderDTO.toOrderResultDTO(examinationResultList, patientDTO)
     }
