@@ -4,7 +4,11 @@ import bd.clinic.modules.examinationInfo.ExaminationType.*
 
 object LabConfig {
 
-    val laboratoryServerInfoMap = mapOf(1 to ServerInfo(8081, "127.0.0.1"))
+    val laboratoryServerInfoMap = mapOf(
+            1 to ServerInfo(port = 8081, ipAddr = "127.0.0.1"),
+            2 to ServerInfo(port = 8082, ipAddr = "127.0.0.1"),
+            3 to ServerInfo(port = 8083, ipAddr = "127.0.0.1")
+    )
 
     val examinationLaboratoryMap = mapOf(
             //BLOOD
@@ -49,7 +53,8 @@ object LabConfig {
             HAZELNUT to 3,
             CARROT to 3,
             POTATO to 3,
-            APPLE to 3)
+            APPLE to 3
+    )
 
     data class ServerInfo(val port: Int, val ipAddr: String)
 }
