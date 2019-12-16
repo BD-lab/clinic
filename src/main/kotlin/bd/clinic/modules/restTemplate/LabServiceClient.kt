@@ -1,5 +1,6 @@
 package bd.clinic.modules.restTemplate
 
+import bd.clinic.modules.infrastructure.exceptions.CannotConnectToAllLaboratoriesException
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
 import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.order.OrderDTO
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
+import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -38,8 +40,12 @@ class LabServiceClient @Autowired internal constructor(
     }
 
     fun sendRequest(orderDTO: OrderDTO, port: Int, ipAddress: String): Unit? {
-        return call {
-            restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port, ipAddress)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
+        return try {
+            call {
+                restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port, ipAddress)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
+            }
+        } catch (e: ResourceAccessException) {
+            throw CannotConnectToAllLaboratoriesException()
         }
     }
 

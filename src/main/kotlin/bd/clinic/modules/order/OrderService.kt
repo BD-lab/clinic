@@ -8,6 +8,7 @@ import bd.clinic.modules.patient.PatientService
 import bd.clinic.modules.restTemplate.LabConfig
 import bd.clinic.modules.restTemplate.LabServiceClient
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import print.PrintResults
 import kotlin.streams.toList
 
@@ -39,6 +40,7 @@ class OrderService(
         return orderRepository.findAllByPatientId(patientId).map { OrderDTO(it) }
     }
 
+    @Transactional
     fun addPatientOrder(order: OrderDTO): OrderDTO {
         checkIfOrderNumberIsUnique(order.orderNumber)
         val patient = patientService.findPatientOrThrow(order.patientId)

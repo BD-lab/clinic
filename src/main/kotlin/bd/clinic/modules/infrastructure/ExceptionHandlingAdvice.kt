@@ -58,4 +58,9 @@ class ExceptionHandlingAdvice {
     fun handleAlreadyExistsPatientPesel(e: PatientPeselAlreadyExistsException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
     }
+
+    @ExceptionHandler(CannotConnectToAllLaboratoriesException::class)
+    fun handleCannotConnectToAllLaboratories(e: CannotConnectToAllLaboratoriesException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.LOCKED).body(e.message)
+    }
 }
