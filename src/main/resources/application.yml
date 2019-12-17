@@ -26,3 +26,4 @@ self:
       uris:
         examinations: /examinations
         order: /order
+        connection: /connection
