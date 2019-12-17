@@ -49,11 +49,21 @@ class OrderService(
     }
 
     private fun saveOrderInLaboratories(orderDTO: OrderDTO) {
+        checkConnectionWithLaboratories(orderDTO.examinations.map { it.laboratoryId }.distinct())
+
         LabConfig.laboratoryServerInfoMap.entries.parallelStream().forEach { (laboratoryId, serverInfo) ->
             val infrastructureOrder = orderDTO.copy(
                     examinations = orderDTO.examinations.filter { it.laboratoryId == laboratoryId })
             if (infrastructureOrder.examinations.isNotEmpty())
                 labServiceClient.sendRequest(infrastructureOrder, serverInfo.port, serverInfo.ipAddr)
+        }
+    }
+
+    private fun checkConnectionWithLaboratories(laboratoryIds: List<Int>) {
+        laboratoryIds.parallelStream().forEach {
+            labServiceClient.sendCheckConnectionRequest((LabConfig.laboratoryServerInfoMap[it]
+                    ?: error("Unknown port!")).port, (LabConfig.laboratoryServerInfoMap[it]
+                    ?: error("Unknown ip address!")).ipAddr)
         }
     }
 

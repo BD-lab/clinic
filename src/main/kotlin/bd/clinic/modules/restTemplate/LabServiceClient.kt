@@ -2,8 +2,8 @@ package bd.clinic.modules.restTemplate
 
 import bd.clinic.modules.infrastructure.exceptions.CannotConnectToLaboratoryException
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
-import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.order.OrderDTO
+import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +25,9 @@ class LabServiceClient @Autowired internal constructor(
         private val gson: Gson,
         @Value("\${self.services.first-lab.protocol}") private val labServiceProtocol: String,
         @Value("\${self.services.first-lab.uris.examinations}") private val examinationsUri: String,
-        @Value("\${self.services.first-lab.uris.order}") private val orderUri: String
+        @Value("\${self.services.first-lab.uris.order}") private val orderUri: String,
+        @Value("\${self.services.first-lab.uris.connection}") private val connectionUri: String
+
 ) {
 
     private fun <T> call(action: () -> ResponseEntity<T>): T? {
@@ -56,6 +58,12 @@ class LabServiceClient @Autowired internal constructor(
         return gson.fromJson<List<ExaminationResultDTO>>(response, type.type)
     }
 
+    fun sendCheckConnectionRequest(port: Int, ipAddress: String): Unit? {
+        return call {
+            restTemplate.exchange(getUrl(prepareUrlToCheckConnection(port, ipAddress)), HttpMethod.GET, HttpEntity.EMPTY, Unit::class.java)
+        }
+    }
+
     fun getUrl(preparedUrl: String): URI {
         return UriComponentsBuilder.fromHttpUrl(preparedUrl).build().toUri()
     }
@@ -66,6 +74,10 @@ class LabServiceClient @Autowired internal constructor(
 
     private fun prepareUrlToGetResults(port: Int, ipAddress: String): String {
         return "$labServiceProtocol://$ipAddress:$port$examinationsUri$orderUri"
+    }
+
+    private fun prepareUrlToCheckConnection(port: Int, ipAddress: String): String {
+        return "$labServiceProtocol://$ipAddress:$port$connectionUri"
     }
 
     private fun messageOf(e: Exception): String {
