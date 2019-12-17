@@ -59,8 +59,8 @@ class ExceptionHandlingAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
     }
 
-    @ExceptionHandler(CannotConnectToAllLaboratoriesException::class)
-    fun handleCannotConnectToAllLaboratories(e: CannotConnectToAllLaboratoriesException): ResponseEntity<*> {
+    @ExceptionHandler(CannotConnectToLaboratoryException::class)
+    fun handleCannotConnectToLaboratory(e: CannotConnectToLaboratoryException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.LOCKED).body(e.message)
     }
 }

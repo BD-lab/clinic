@@ -1,6 +1,6 @@
 package bd.clinic.modules.restTemplate
 
-import bd.clinic.modules.infrastructure.exceptions.CannotConnectToAllLaboratoriesException
+import bd.clinic.modules.infrastructure.exceptions.CannotConnectToLaboratoryException
 import bd.clinic.modules.infrastructure.exceptions.LabServiceClientException
 import bd.clinic.modules.order.examinationResult.ExaminationResultDTO
 import bd.clinic.modules.order.OrderDTO
@@ -32,6 +32,8 @@ class LabServiceClient @Autowired internal constructor(
         try {
             val response = action.invoke()
             return response.body
+        } catch (ex: ResourceAccessException) {
+            throw CannotConnectToLaboratoryException()
         } catch (ex: HttpClientErrorException) {
             throw LabServiceClientException(messageOf(ex), ex)
         } catch (ex: HttpServerErrorException) {
@@ -40,12 +42,8 @@ class LabServiceClient @Autowired internal constructor(
     }
 
     fun sendRequest(orderDTO: OrderDTO, port: Int, ipAddress: String): Unit? {
-        return try {
-            call {
-                restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port, ipAddress)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
-            }
-        } catch (e: ResourceAccessException) {
-            throw CannotConnectToAllLaboratoriesException()
+        return call {
+            restTemplate.exchange(getUrl(prepareUrlToSaveOrder(port, ipAddress)), HttpMethod.POST, HttpEntity(orderDTO), Unit::class.java)
         }
     }
 
