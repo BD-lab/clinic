@@ -1,6 +1,5 @@
 package bd.clinic.modules.patient
 
-import org.hibernate.validator.constraints.pl.PESEL
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -15,7 +14,6 @@ class Patient(
         val lastName: String,
 
         @Column(updatable = false, unique = true)
-        @field:PESEL(message = "Invalid PESEL number.")
         val pesel: String,
 
         val streetName: String,

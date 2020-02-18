@@ -1,5 +1,7 @@
 package bd.clinic.modules.patient
 
+import bd.clinic.modules.common.decode
+import bd.clinic.modules.common.encode
 import bd.clinic.modules.infrastructure.exceptions.*
 import bd.clinic.modules.patientHistory.PatientHistoryService
 import org.springframework.data.repository.findByIdOrNull
@@ -17,7 +19,7 @@ class PatientService(
     )
 
     fun getPatientByPesel(pesel: String): PatientDTO = PatientDTO(
-            patientRepository.findByPesel(pesel) ?: throw PatientPeselNotFoundException(pesel)
+            patientRepository.findByPesel(encode(pesel)) ?: throw PatientPeselNotFoundException(pesel)
     )
 
     fun addPatient(patient: PatientDTO): PatientDTO {
@@ -44,7 +46,7 @@ class PatientService(
             throw EntityAlreadyExistsException(Patient::class, patientId)
 
         val pesel = patient.pesel
-        if (patientRepository.existsByPesel(pesel))
+        if (patientRepository.existsByPesel(decode(pesel)))
             throw PatientPeselAlreadyExistsException(pesel)
     }
 }

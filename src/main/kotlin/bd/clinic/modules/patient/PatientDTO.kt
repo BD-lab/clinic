@@ -1,5 +1,7 @@
 package bd.clinic.modules.patient
 
+import bd.clinic.modules.common.decode
+import bd.clinic.modules.common.encode
 import org.hibernate.validator.constraints.pl.PESEL
 
 data class PatientDTO(
@@ -17,7 +19,7 @@ data class PatientDTO(
             id = patient.id,
             firstName = patient.firstName,
             lastName = patient.lastName,
-            pesel = patient.pesel,
+            pesel = decode(patient.pesel),
             streetName = patient.streetName,
             buildingNumber = patient.buildingNumber,
             zipCode = patient.zipCode,
@@ -28,7 +30,7 @@ data class PatientDTO(
             id = this.id,
             firstName = this.firstName,
             lastName = this.lastName,
-            pesel = this.pesel,
+            pesel = encode(this.pesel),
             streetName = this.streetName,
             buildingNumber = this.buildingNumber,
             zipCode = this.zipCode,
